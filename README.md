@@ -32,7 +32,8 @@ const stopPolling = startPolling({
 
 ## Telegram notifications
 
-Add chat with [@TrainKetsBot](https://t.me/TrainKetsBot) and follow instructions.
+~Add chat with [@TrainKetsBot](https://t.me/TrainKetsBot) and follow instructions.~
+> ⚠️ WARN: **TrainKetsBot** is currently not working, so use manuall about how to create your own bot.
 
 Or create your own bot:
 
@@ -57,4 +58,33 @@ script.textContent = `
 `;
 
 document.body.appendChild(script);
+```
+
+## Captcha
+
+UZ introduced captche, so now we have one more restriction.
+Workaround is sent notification every time, captcha is shown.
+It will let you resolve it and continue search polling.
+
+Code:
+```js
+let wasCaptchaVisible;
+function checkCaptcha() {
+  const isCaptchaVisible = Array.from(
+    document.querySelectorAll('iframe[title~=reCAPTCHA]'),
+  ).some((frame) => window.getComputedStyle(frame).visibility === 'visible');
+
+  if (isCaptchaVisible !== wasCaptchaVisible) {
+    fetch(
+      `https://api.telegram.org/bot<token>/sendMessage?chat_id=<chat_id>&text=${
+        isCaptchaVisible ? 'Captcha is visible' : 'Captcha is hidden'
+      }`,
+    );
+    console.log({ isCaptchaVisible, wasCaptchaVisible });
+    wasCaptchaVisible = isCaptchaVisible;
+  }
+}
+
+setInterval(checkCaptcha, 30 * 1000);
+checkCaptcha();
 ```

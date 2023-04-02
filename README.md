@@ -63,7 +63,8 @@ document.body.appendChild(script);
 ## Captcha
 
 UZ introduced captche, so now we have one more restriction.
-Workaround is sent notification every time, captcha is shown.
+
+Workaround - send notification every time, captcha is shown.
 It will let you resolve it and continue search polling.
 
 Code:
